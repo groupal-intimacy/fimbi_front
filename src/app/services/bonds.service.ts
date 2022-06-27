@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {environment} from 'src/environments/environment';
-import {Bond, FimbiResponse, LoginOptional, Purchase} from '../models/entities-model';
+import {Bond, BondReq, ChartData, FimbiResponse, LoginOptional, Purchase} from '../models/entities-model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,10 @@ export class BondsService {
   }
   getById(id : number): Observable<Bond> {
     return this.http.get<Bond>(`${this.apiBase}/bonds/${id}`);
+  }
+
+  getCashFlowById(id : number): Observable<ChartData> {
+    return this.http.get<ChartData>(`${this.apiBase}/bonds/cash_flow/${id}`);
   }
 
   getLast(n : number): Observable<Bond[]> {
@@ -39,8 +43,12 @@ export class BondsService {
     return this.http.post<FimbiResponse>(`${this.apiBase}/users/adquire_bond/\?bond_id\=${bond_id}`, login);
   }
 
-  publish(bond : Bond) : Observable<Bond> {
-    return this.http.post<Bond>(`${this.apiBase}/bonds`, bond);
+  publish(bond : BondReq) : Observable<BondReq> {
+    return this.http.post<BondReq>(`${this.apiBase}/bonds`, bond);
+  }
+
+  getLiborData() : Observable<any> {
+    return this.http.get<any>('https://data.nasdaq.com/api/v3/datasets/OPEC/ORB.json')
   }
 
 }
